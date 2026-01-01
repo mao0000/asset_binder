@@ -1,73 +1,89 @@
-<main class="flex-1 overflow-y-auto bg-white">
-  <div class="max-w-5xl mx-auto px-8 py-10">
-    
-    <div class="flex items-center justify-between mb-8">
+<main class="flex-1 overflow-y-auto bg-white px-10 py-12">
+  <div class="max-w-5xl mx-auto">
+    <div class="flex items-center justify-between mb-10 border-b border-slate-100 pb-8">
       <div>
-        <h2 class="text-xl font-bold text-slate-900 tracking-tight">車両一覧</h2>
-        <p class="text-slate-400 text-[13px] mt-0.5">現在、42台の車両を管理しています。</p>
+        <h2 class="text-2xl font-bold text-slate-800 tracking-tight">車両一覧</h2>
       </div>
-      <button class="bg-brand hover:bg-brand-dark text-white text-[13px] font-bold py-2 px-5 rounded shadow-sm transition-all duration-200">
-        ＋ 新規登録
+      <button class="bg-brand hover:bg-brand-dark text-white text-[13px] font-bold py-2.5 px-6 rounded shadow-md transition-all flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        車両を追加
       </button>
     </div>
 
-    <!-- 検索フォーム -->
+    <!-- Search Bar -->
     <div class="mb-10">
-      <div class="relative max-w-2xl">
-        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-300">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+      <div class="relative max-w-md">
+        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
         </span>
-        <input type="text" class="block w-full pl-10 pr-4 py-2.5 bg-surface border border-slate-100 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand focus:border-brand focus:bg-white transition-all" placeholder="車両番号、車種、拠点で検索...">
+        <input type="text" class="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all" placeholder="車両番号や拠点名で検索">
       </div>
     </div>
 
-    <!-- テーブル -->
-    <div class="mt-8">
-      <table class="min-w-full">
+    <!-- Table -->
+    <div class="border border-slate-100 rounded-xl overflow-hidden shadow-sm">
+      <table class="min-w-full border-collapse">
         <thead>
-          <tr class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] border-b border-slate-50">
-            <th class="pb-4 text-left font-bold">Vehicle</th>
-            <th class="pb-4 text-left font-bold">Details</th>
-            <th class="pb-4 text-left font-bold">Status</th>
-            <th class="pb-4 text-right font-bold">Action</th>
+          <tr class="text-[11px] font-bold text-slate-500 uppercase tracking-widest bg-slate-50 border-b border-slate-200">
+            <th class="py-4 px-6 text-left">車両番号</th>
+            <th class="py-4 px-6 text-left">所属</th>
+            <th class="py-4 px-6 text-left">ステータス</th>
+            <th class="py-4 px-6 text-right"></th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-50">
-          <tr class="group hover:bg-slate-50/50 transition-colors">
-            <td class="py-5">
-              <p class="text-[13px] font-bold text-slate-800">習志野 500 あ 12-34</p>
-              <p class="text-[11px] text-slate-400 mt-0.5">ID: 00124 • 千葉支店</p>
+        <tbody class="divide-y divide-slate-100">
+          <tr class="table-row-hover transition-colors">
+            <td class="py-6 px-6">
+              <!-- Updated: Removed hyphen from License Plate -->
+              <p class="text-[14px] font-bold text-slate-800">習志野 500 あ 1234</p>
+              <p class="text-[11px] text-slate-500 font-medium mt-0.5">管理番号: 00124</p>
             </td>
-            <td class="py-5 text-[13px] text-slate-500 font-medium">
-              トヨタ / プリウス <span class="text-slate-200 mx-2">|</span> 85,400 km
+            <td class="py-6 px-6">
+              <p class="text-[13px] text-slate-700 font-semibold">株式会社アセットロジ</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">千葉営業所</p>
             </td>
-            <td class="py-5">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-green-50 text-green-600 border border-green-100 uppercase tracking-tighter">Active</span>
+            <td class="py-6 px-6">
+              <span class="status-badge bg-brand/5 text-brand border-brand/20">
+                <span class="w-1.5 h-1.5 rounded-sm bg-brand mr-2 opacity-80"></span>
+                稼働中
+              </span>
             </td>
-            <td class="py-5 text-right">
-              <button class="text-slate-300 hover:text-brand text-[11px] font-bold transition uppercase tracking-widest">Edit</button>
+            <td class="py-6 px-6 text-right">
+              <button class="text-slate-400 hover:text-brand transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                </svg>
+              </button>
             </td>
           </tr>
-          <tr class="group hover:bg-slate-50/50 transition-colors">
-            <td class="py-5">
-              <p class="text-[13px] font-bold text-slate-800">足立 300 さ 98-76</p>
-              <p class="text-[11px] text-slate-400 mt-0.5">ID: 00125 • 東京本店</p>
+          <tr class="table-row-hover transition-colors">
+            <td class="py-6 px-6">
+              <!-- Updated: Removed hyphen from License Plate -->
+              <p class="text-[14px] font-bold text-slate-800">足立 300 さ 9876</p>
+              <p class="text-[11px] text-slate-500 font-medium mt-0.5">管理番号: 00125</p>
             </td>
-            <td class="py-5 text-[13px] text-slate-500 font-medium">
-              日産 / セレナ <span class="text-slate-200 mx-2">|</span> 12,200 km
+            <td class="py-6 px-6">
+              <p class="text-[13px] text-slate-700 font-semibold">東京トランスポート</p>
+              <p class="text-[11px] text-slate-400 mt-0.5">東京営業所</p>
             </td>
-            <td class="py-5">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-100 uppercase tracking-tighter">Review</span>
+            <td class="py-6 px-6">
+              <span class="status-badge bg-slate-100 text-slate-600 border-slate-200">
+                <span class="w-1.5 h-1.5 rounded-sm bg-slate-400 mr-2 opacity-80"></span>
+                点検中
+              </span>
             </td>
-            <td class="py-5 text-right">
-              <button class="text-slate-300 hover:text-brand text-[11px] font-bold transition uppercase tracking-widest">Edit</button>
+            <td class="py-6 px-6 text-right">
+              <button class="text-slate-400 hover:text-brand transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                </svg>
+              </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-
   </div>
 </main>
