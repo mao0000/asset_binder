@@ -1,0 +1,76 @@
+<%= form_with model: vehicle, local: true, data: { turbo: false }, class: "space-y-8" do |f| %>
+  <% if vehicle.errors.any? %>
+    <div class="bg-red-50 text-red-500 p-4 rounded-lg text-sm font-bold text-center">
+      入力内容に不備があります。
+    </div>
+  <% end %>
+
+  <!-- 車両番号 (ハイフンなし) -->
+  <div>
+    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">車両番号 <span class="text-red-500 ml-1">*</span></label>
+    <div class="grid grid-cols-4 gap-4">
+      <div class="space-y-1">
+        <p class="text-[10px] text-slate-400 ml-1">地域</p>
+        <%= f.text_field :v_location, placeholder: "世田谷", class: "w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+      </div>
+      <div class="space-y-1">
+        <p class="text-[10px] text-slate-400 ml-1">分類番号</p>
+        <%= f.text_field :v_code, placeholder: "500", class: "w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+      </div>
+      <div class="space-y-1">
+        <p class="text-[10px] text-slate-400 ml-1">かな</p>
+        <%= f.text_field :v_kana, placeholder: "あ", class: "w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+      </div>
+      <div class="space-y-1">
+        <p class="text-[10px] text-slate-400 ml-1">一連番号</p>
+        <%= f.text_field :v_serial, placeholder: "1234", class: "w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- 車載器管理番号 -->
+  <div>
+    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">車載器管理番号 (5桁-8桁-6桁)</label>
+    <div class="flex items-center space-x-2">
+      <%= f.text_field :obe_number_part1, placeholder: "12345", maxlength: 5, class: "w-24 p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand transition-all text-center" %>
+      <span class="text-slate-400 font-bold">-</span>
+      <%= f.text_field :obe_number_part2, placeholder: "12345678", maxlength: 8, class: "w-36 p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand transition-all text-center" %>
+      <span class="text-slate-400 font-bold">-</span>
+      <%= f.text_field :obe_number_part3, placeholder: "123456", maxlength: 6, class: "w-32 p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand transition-all text-center" %>
+    </div>
+  </div>
+
+  <!-- 所属情報 -->
+  <div class="grid grid-cols-1 gap-8">
+    <div>
+      <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">所属営業所 <span class="text-red-500 ml-1">*</span></label>
+      <div class="relative">
+        <%= f.collection_select :office_id, Office.all, :id, :name, { prompt: "営業所を選択してください" }, { class: "w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-brand transition-all appearance-none cursor-pointer" } %>
+        <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ステータス -->
+  <div>
+    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">ステータス <span class="text-red-500 ml-1">*</span></label>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <% Status.all.each do |status| %>
+        <label class="cursor-pointer">
+          <%= f.radio_button :status_id, status.id, class: "hidden peer" %>
+          <div class="p-4 border border-slate-200 rounded-xl bg-slate-50 peer-checked:bg-brand/5 peer-checked:border-brand peer-checked:text-brand transition-all text-center h-full flex items-center justify-center">
+            <span class="text-xs font-bold"><%= status.name %></span>
+          </div>
+        </label>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- ボタンエリア -->
+  <div class="pt-10 border-t border-slate-100 flex justify-end items-center space-x-6">
+    <%= link_to "キャンセル", (vehicle.new_record? ? root_path : vehicle_path(vehicle)), class: "text-[13px] font-bold text-slate-400 hover:text-slate-600 transition" %>
+    <%= f.submit (vehicle.new_record? ? "車両を登録する" : "変更を保存する"), class: "bg-brand hover:bg-brand-dark text-white text-[14px] font-bold py-3 px-10 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all cursor-pointer" %>
+  </div>
+<% end %>

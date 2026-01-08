@@ -5,4 +5,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   
   enum role: { admin: 0, staff: 1, viewer: 2 }
+
+  has_many :vehicles
 end

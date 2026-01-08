@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asset-Binder</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     <script>
@@ -11,9 +14,9 @@
         theme: { 
           extend: { 
             colors: { 
-              brand: '#00A7E1', 
-              'brand-dark': '#008BBF',
-              'brand-light': '#E6F6FC',
+              brand: '#3478A8', 
+              'brand-dark': '#245880',
+              'brand-light': '#E6F0F5',
               'surface': '#F1F5F9'
             } 
           } 
@@ -31,12 +34,12 @@
         letter-spacing: -0.01em;
       }
       .logo-main {
-        font-weight: 600;
-        color: #00A7E1;
+        font-weight: 400;
+        color: #3478A8;
       }
       .logo-sub {
         font-weight: 400;
-        color: #00A7E1;
+        color: #3478A8;
       }
 
       ::-webkit-scrollbar { width: 4px; }
@@ -60,9 +63,14 @@
   </head>
 
   <body class="text-slate-900 flex flex-col h-screen overflow-hidden">
-    <%= render 'layouts/header' %>
-    <div class="flex flex-1 overflow-hidden">
-      <%= render 'layouts/sidebar' %>
+    <% if user_signed_in? %>
+      <%= render 'layouts/header' %>
+    <% end %>
+
+    <div class="flex flex-1 overflow-hidden <%= user_signed_in? ? '' : 'justify-center items-center bg-slate-50' %>">
+      <% if user_signed_in? %>
+        <%= render 'layouts/sidebar' %>
+      <% end %>
       <%= yield %>
     </div>
   </body>
