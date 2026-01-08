@@ -3,41 +3,74 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asset-Binder | 車両一覧</title>
+    <title>Asset-Binder</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <style>
-      body {
-        font-family: 'Inter', 'Noto Sans JP', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        background-color: #FFFFFF;
-      }
-      /* スクロールバー：極細にしてノイズを減らす */
-      ::-webkit-scrollbar { width: 4px; }
-      ::-webkit-scrollbar-track { background: transparent; }
-      ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
-    </style>
-
     <script>
       tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              brand: '#00A7E1', // テーマカラー（水色）
-              'brand-dark': '#008BBF',
-              'surface': '#F8FAFC', // サイドバー用薄いグレー
-            }
-          }
+        theme: { 
+          extend: { 
+            colors: { 
+              brand: '#3478A8', 
+              'brand-dark': '#245880',
+              'brand-light': '#E6F0F5',
+              'surface': '#F1F5F9'
+            } 
+          } 
         }
       }
     </script>
+    <style>
+      body { 
+        font-family: 'Inter', 'Noto Sans JP', sans-serif; 
+        -webkit-font-smoothing: antialiased;
+        background-color: #ffffff;
+      }
+      
+      .logo-container {
+        letter-spacing: -0.01em;
+      }
+      .logo-main {
+        font-weight: 400;
+        color: #3478A8;
+      }
+      .logo-sub {
+        font-weight: 400;
+        color: #3478A8;
+      }
+
+      ::-webkit-scrollbar { width: 4px; }
+      ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+
+      .table-row-hover:hover {
+        background-color: #F8FAFC;
+      }
+
+      /* Status badge common styles */
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.375rem;
+        font-size: 10px;
+        font-weight: 700;
+        border-width: 1px;
+      }
+    </style>
   </head>
 
   <body class="text-slate-900 flex flex-col h-screen overflow-hidden">
-    <%= render 'layouts/header' %>
-    <div class="flex flex-1 overflow-hidden">
-      <%= render 'layouts/sidebar' %>
+    <% if user_signed_in? %>
+      <%= render 'layouts/header' %>
+    <% end %>
+
+    <div class="flex flex-1 overflow-hidden <%= user_signed_in? ? '' : 'justify-center items-center bg-slate-50' %>">
+      <% if user_signed_in? %>
+        <%= render 'layouts/sidebar' %>
+      <% end %>
       <%= yield %>
     </div>
   </body>
