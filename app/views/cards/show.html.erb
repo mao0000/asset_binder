@@ -76,15 +76,23 @@
             <h3 class="text-3xl font-mono font-bold tracking-wider"><%= @card.internal_id %></h3>
           </div>
 
-          <div class="relative z-10">
-            <p class="text-xs text-slate-400 mb-1">車両番号</p>
-            <div class="font-medium text-lg">
-              <% if @card.vehicle %>
-                <%= link_to @card.vehicle.plate_number, vehicle_path(@card.vehicle), class: "hover:text-white/80 transition underline decoration-white/30 underline-offset-4" %>
-              <% else %>
-                <span class="text-slate-500">未割り当て</span>
-              <% end %>
+          <div class="grid grid-cols-2 gap-4 relative z-10">
+            <div>
+              <p class="text-xs text-slate-400 mb-1">車両番号</p>
+              <div class="font-medium text-lg">
+                <% if @card.vehicle %>
+                  <%= link_to @card.vehicle.plate_number, vehicle_path(@card.vehicle), class: "hover:text-white/80 transition underline decoration-white/30 underline-offset-4" %>
+                <% else %>
+                  <span class="text-slate-500">未割り当て</span>
+                <% end %>
+              </div>
             </div>
+            <% if @card.vehicle %>
+              <div>
+                <p class="text-xs text-slate-400 mb-1">所属営業所</p>
+                <div class="font-medium text-lg"><%= @card.vehicle.office&.name %></div>
+              </div>
+            <% end %>
           </div>
         </div>
       </div>

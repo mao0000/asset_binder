@@ -9,6 +9,7 @@
       <!-- 検索・絞り込み -->
       <div>
         <%= form_with url: cards_path, method: :get, local: true, data: { turbo: false }, class: "flex items-center space-x-2" do |f| %>
+          <%= f.collection_select :office_id, Office.all, :id, :name, { include_blank: "全ての営業所", selected: params[:office_id] }, { class: "py-2 pl-3 pr-8 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand cursor-pointer", onchange: "this.form.submit()" } %>
           <%= f.select :status, [['全てのステータス', ''], ['申請中', 'requesting'], ['利用中', 'active'], ['在庫', 'stock'], ['停止', 'inactive']], { selected: params[:status] }, { class: "py-2 pl-3 pr-8 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand cursor-pointer", onchange: "this.form.submit()" } %>
           <div class="relative">
             <%= f.text_field :query, value: params[:query], placeholder: "管理番号で検索...", class: "pl-10 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand w-64" %>
@@ -36,6 +37,7 @@
             <th class="py-4 px-6 text-left">管理番号</th>
             <th class="py-4 px-6 text-left">発行種別</th>
             <th class="py-4 px-6 text-left">車両番号</th>
+            <th class="py-4 px-6 text-left">所属営業所</th>
             <th class="py-4 px-6 text-left">ステータス</th>
           </tr>
         </thead>
@@ -48,6 +50,7 @@
                   <%= card.issue_type == 'initial' ? '新規発行' : '再発行' %>
                 </td>
                 <td class="py-4 px-6 text-sm text-slate-600"><%= card.vehicle&.plate_number || "未割り当て" %></td>
+                <td class="py-4 px-6 text-sm text-slate-600"><%= card.vehicle&.office&.name || "-" %></td>
                 <td class="py-4 px-6 text-sm">
                   <span class="inline-flex items-center px-2.5 py-1 rounded border text-[13px] font-semibold bg-slate-100 text-slate-600 border-slate-300">
                     <%= card.status_text %>

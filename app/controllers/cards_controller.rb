@@ -8,6 +8,10 @@ class CardsController < ApplicationController
       @cards = @cards.where(status: params[:status])
     end
 
+    if params[:office_id].present?
+      @cards = @cards.joins(:vehicle).where(vehicles: { office_id: params[:office_id] })
+    end
+
     if params[:query].present?
       @cards = @cards.where("internal_id LIKE ?", "%#{params[:query]}%")
     end
