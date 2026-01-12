@@ -6,6 +6,7 @@ class InspectionsController < ApplicationController
     # 車検期限が近い順に並べ替え（期限がないものは最後に）
     scope = Vehicle.includes(:inspections)
     scope = scope.where(office_id: params[:office_id]) if params[:office_id].present?
+    scope = scope.search(params[:query])
 
     @vehicles = scope.all.sort_by do |v|
       v.inspection_expiration_date || Date.new(2999, 12, 31)
