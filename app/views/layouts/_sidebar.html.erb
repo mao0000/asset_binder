@@ -11,10 +11,13 @@
         <svg class="h-4 w-4 mr-3 <%= is_inspections ? '' : 'opacity-70' %>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
         車検スケジュール
       <% end %>
-      <a href="#" class="flex items-center py-2.5 px-3 rounded text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 transition text-[13px] font-medium">
-        <svg class="h-4 w-4 mr-3 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-        レポート
-      </a>
+      <% is_cards = controller_name == 'cards' %>
+      <%= link_to "#", class: "flex items-center py-2.5 px-3 rounded transition text-[13px] #{is_cards ? 'text-brand font-bold bg-white border border-slate-300 shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 font-medium'}" do %>
+        <svg class="h-4 w-4 mr-3 <%= is_cards ? '' : 'opacity-70' %>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+        </svg>
+        カード管理
+      <% end %>
     </nav>
   </div>
 </aside>
