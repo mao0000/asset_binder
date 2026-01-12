@@ -1,72 +1,57 @@
 <main class="flex-1 overflow-y-auto bg-white px-10 py-12">
   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center justify-between mb-10 border-b border-slate-100 pb-8">
+    <div class="flex items-center justify-between mb-10 border-b border-slate-300 pb-8">
       <div>
         <h2 class="text-2xl font-bold text-slate-800 tracking-tight">車両一覧</h2>
+        <p class="text-sm text-slate-500 mt-1">登録されている車両データを管理します</p>
       </div>
-      <%= link_to new_vehicle_path, class: "bg-brand hover:bg-brand-dark text-white text-[13px] font-bold py-2.5 px-6 rounded shadow-md transition-all flex items-center" do %>
-        <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-        </svg>
-        車両を追加
-      <% end %>
-    </div>
-
-    <!-- Search Bar -->
-    <div class="mb-10">
-      <div class="relative max-w-md">
-        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-        </span>
-        <input type="text" class="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all" placeholder="車両番号や拠点名で検索">
+      <div class="flex items-center space-x-4">
+        <!-- 検索バー -->
+        <div class="relative">
+          <input type="text" placeholder="車両番号で検索..." class="pl-10 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand w-64">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        
+        <%= link_to new_vehicle_path, class: "flex items-center px-4 py-2 bg-brand hover:bg-brand-dark text-white rounded-lg text-sm font-bold shadow-md transition" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          車両を追加
+        <% end %>
       </div>
     </div>
 
     <!-- Table -->
-    <div class="border border-slate-100 rounded-xl shadow-sm bg-white">
+    <div class="border border-slate-300 rounded-xl shadow-sm bg-white">
       <table class="min-w-full border-collapse">
         <thead>
-          <tr class="text-[11px] font-bold text-slate-500 uppercase tracking-widest bg-slate-50 border-b border-slate-200">
+          <tr class="text-[11px] font-bold text-slate-500 uppercase tracking-widest bg-slate-50 border-b border-slate-300">
             <th class="py-4 px-6 text-left">車両番号</th>
             <th class="py-4 px-6 text-left">所属</th>
             <th class="py-4 px-6 text-left">ステータス</th>
-            <th class="py-4 px-6 text-right"></th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-100">
+        <tbody class="divide-y divide-slate-200">
           <% @vehicles.each do |vehicle| %>
-            <tr class="table-row-hover transition-colors">
-              <td class="py-6 px-6">
+            <tr class="table-row-hover transition-colors cursor-pointer" onclick="window.location='<%= vehicle_path(vehicle) %>'">
+              <td class="py-4 px-6">
                 <p class="text-[14px] font-bold text-slate-800"><%= "#{vehicle.v_location} #{vehicle.v_code} #{vehicle.v_kana} #{vehicle.v_serial}" %></p>
               </td>
-              <td class="py-6 px-6">
-                <p class="text-[13px] text-slate-700 font-semibold"><%= vehicle.office&.name %></p>
+              <td class="py-4 px-6">
+                <p class="text-[13px] text-slate-700"><%= vehicle.office&.name %></p>
               </td>
-              <td class="py-6 px-6">
+              <td class="py-4 px-6">
                 <% 
                   status_style = case vehicle.status_id
                     when 1 then "bg-brand/5 text-brand border-brand/20"
-                    else "bg-slate-100 text-slate-600 border-slate-200"
+                    else "bg-slate-100 text-slate-600 border-slate-300"
                   end
                 %>
                 <span class="inline-flex items-center px-2.5 py-1 rounded border text-[13px] font-semibold <%= status_style %>">
                   <%= vehicle.status&.name %>
                 </span>
-              </td>
-              <td class="py-6 px-6 text-right">
-                <details class="group relative inline-block text-left">
-                  <summary class="list-none cursor-pointer text-slate-400 hover:text-brand transition p-2 rounded-full hover:bg-slate-50 [&::-webkit-details-marker]:hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-                    </svg>
-                  </summary>
-                  <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-slate-100 z-50 origin-top-right">
-                    <div class="py-1">
-                      <%= link_to "詳細を見る", vehicle_path(vehicle), class: "block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-brand transition" %>
-                      <%= link_to "編集する", edit_vehicle_path(vehicle), class: "block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-brand transition" %>
-                    </div>
-                  </div>
-                </details>
               </td>
             </tr>
           <% end %>

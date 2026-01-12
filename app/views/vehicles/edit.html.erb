@@ -1,5 +1,5 @@
 <main class="flex-1 overflow-y-auto bg-white px-10 py-12 page-fade">
-  <div class="max-w-2xl mx-auto">
+  <div class="max-w-5xl mx-auto">
     <!-- 戻るボタンとタイトル -->
     <div class="flex items-center mb-10">
       <%= link_to vehicle_path(@vehicle), class: "mr-4 p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition" do %>
@@ -11,7 +11,7 @@
     </div>
 
     <!-- 入力フォームカード -->
-    <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-10">
+    <div class="bg-white border border-slate-300 rounded-xl shadow-sm p-10">
       <%= render 'form', vehicle: @vehicle %>
     </div>
   </div>
