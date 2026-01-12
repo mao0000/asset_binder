@@ -75,12 +75,6 @@
             </dd>
           </div>
           <div class="sm:col-span-1">
-            <dt class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">車検周期</dt>
-            <dd class="text-sm font-semibold text-slate-800">
-              <%= @vehicle.inspection_cycle_years ? "#{@vehicle.inspection_cycle_years}年" : "未判定" %>
-            </dd>
-          </div>
-          <div class="sm:col-span-1">
             <dt class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">自動車の種別</dt>
             <dd class="text-sm font-semibold text-slate-800">
               <%= @vehicle.vehicle_type || "未登録" %>
