@@ -46,6 +46,8 @@ class CardsController < ApplicationController
   end
 
   def destroy
+    @card.destroy
+    redirect_to cards_path, notice: "カード情報を削除しました。", status: :see_other
   end
 
   # 営業所が受領した時の処理
