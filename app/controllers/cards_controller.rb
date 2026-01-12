@@ -2,8 +2,15 @@ class CardsController < ApplicationController
   before_action :set_card, only: [:show, :edit, :update, :destroy, :receive, :return_to_stock]
 
   def index
-    # 検索やフィルタリングが必要な場合はここで調整
     @cards = Card.all.includes(:vehicle)
+
+    if params[:status].present?
+      @cards = @cards.where(status: params[:status])
+    end
+
+    if params[:query].present?
+      @cards = @cards.where("internal_id LIKE ?", "%#{params[:query]}%")
+    end
   end
 
   def new
