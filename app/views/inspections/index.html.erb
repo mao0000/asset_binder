@@ -5,6 +5,11 @@
         <h2 class="text-2xl font-bold text-slate-800 tracking-tight">車検スケジュール</h2>
         <p class="text-sm text-slate-500 mt-1">全車両の車検期限を一覧で確認できます</p>
       </div>
+      <div>
+        <%= form_with url: inspections_path, method: :get, local: true, data: { turbo: false } do |f| %>
+          <%= f.collection_select :office_id, Office.all, :id, :name, { include_blank: "全ての営業所", selected: params[:office_id] }, { class: "py-2 pl-3 pr-8 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand cursor-pointer", onchange: "this.form.submit()" } %>
+        <% end %>
+      </div>
     </div>
 
     <!-- Table -->

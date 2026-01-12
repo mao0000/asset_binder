@@ -4,7 +4,10 @@ class InspectionsController < ApplicationController
   # 車検スケジュール一覧（サイドバーから）
   def index
     # 車検期限が近い順に並べ替え（期限がないものは最後に）
-    @vehicles = Vehicle.includes(:inspections).all.sort_by do |v|
+    scope = Vehicle.includes(:inspections)
+    scope = scope.where(office_id: params[:office_id]) if params[:office_id].present?
+
+    @vehicles = scope.all.sort_by do |v|
       v.inspection_expiration_date || Date.new(2999, 12, 31)
     end
   end
