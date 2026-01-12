@@ -1,0 +1,58 @@
+<main class="flex-1 overflow-y-auto bg-white px-10 py-12">
+  <div class="max-w-5xl mx-auto">
+    <div class="mb-8 border-b border-slate-300 pb-8">
+      <h2 class="text-2xl font-bold text-slate-800 tracking-tight">カード管理</h2>
+      <p class="text-sm text-slate-500 mt-1">ETCカードや燃料カードの情報を管理します</p>
+    </div>
+
+    <div class="flex items-center justify-start space-x-4 mb-6">
+      <!-- TODO: 検索・絞り込みフォームをここに追加 -->
+      
+      <!-- 新規登録ボタン -->
+      <%= link_to new_card_path, class: "flex items-center px-4 py-2 bg-brand hover:bg-brand-dark text-white rounded-lg text-sm font-bold shadow-md transition" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        カードを新規登録
+      <% end %>
+    </div>
+
+    <!-- Table -->
+    <div class="border border-slate-300 rounded-xl shadow-sm bg-white">
+      <table class="min-w-full border-collapse">
+        <thead>
+          <tr class="text-[11px] font-bold text-slate-500 uppercase tracking-widest bg-slate-50 border-b border-slate-300">
+            <th class="py-4 px-6 text-left">管理番号</th>
+            <th class="py-4 px-6 text-left">発行種別</th>
+            <th class="py-4 px-6 text-left">車両番号</th>
+            <th class="py-4 px-6 text-left">ステータス</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200">
+          <% if @cards.any? %>
+            <% @cards.each do |card| %>
+              <tr class="hover:bg-slate-50 transition-colors cursor-pointer" onclick="window.location='<%= card_path(card) %>'">
+                <td class="py-4 px-6 text-sm font-bold text-slate-800"><%= card.internal_id %></td>
+                <td class="py-4 px-6 text-sm text-slate-600">
+                  <%= card.issue_type == 'initial' ? '新規発行' : '再発行' %>
+                </td>
+                <td class="py-4 px-6 text-sm text-slate-600"><%= card.vehicle&.plate_number || "未割り当て" %></td>
+                <td class="py-4 px-6 text-sm">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded border text-[13px] font-semibold bg-slate-100 text-slate-600 border-slate-300">
+                    <%= card.status_text %>
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="4" class="py-10 px-6 text-center text-slate-400 text-sm">
+                カードデータはまだありません。
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
