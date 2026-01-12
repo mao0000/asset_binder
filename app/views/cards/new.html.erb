@@ -1,0 +1,78 @@
+<main class="flex-1 overflow-y-auto bg-white px-10 py-12 page-fade">
+  <div class="max-w-5xl mx-auto">
+    <!-- 戻るボタンとタイトル -->
+    <div class="flex items-center mb-10">
+      <%= link_to cards_path, class: "mr-4 p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      <% end %>
+      <h2 class="text-2xl font-bold text-slate-800 tracking-tight">給油カード 新規登録</h2>
+    </div>
+
+    <!-- 入力フォームカード -->
+    <div class="bg-white border border-slate-300 rounded-xl shadow-sm p-10">
+      <%= form_with(model: @card, local: true, data: { turbo: false }, class: "space-y-8") do |f| %>
+        
+        <% if @card.errors.any? %>
+          <div class="bg-red-50 text-red-500 p-4 rounded-lg text-sm font-bold text-center">
+            入力内容に不備があります。
+            <ul class="mt-2 list-disc list-inside font-normal text-left">
+              <% @card.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <!-- 紐付ける車両 -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">紐付ける車両 <span class="text-red-500 ml-1">*</span></label>
+          <div class="relative">
+            <%= f.collection_select :vehicle_id, @vehicles, :id, :plate_number, { include_blank: "車両を選択してください" }, { class: "w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all cursor-pointer appearance-none" } %>
+            <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 mt-2">※廃車/売却済みの車両は選択しないでください</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <!-- 管理番号 -->
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">管理番号 (4桁)</label>
+            <%= f.text_field :internal_id, class: "w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all", placeholder: "例: 2401" %>
+          </div>
+          <!-- 発行申請日 -->
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">発行申請日</label>
+            <%= f.date_field :applied_on, value: Date.today, class: "w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+          </div>
+        </div>
+
+        <!-- 発行種別 -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">発行種別</label>
+          <div class="relative">
+            <%= f.select :issue_type, [['新規発行', 'initial'], ['再発行', 'reissue']], { include_blank: "選択してください" }, { class: "w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all cursor-pointer appearance-none" } %>
+            <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- 備考 -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">備考（再発行理由など）</label>
+          <%= f.text_area :remarks, rows: 3, class: "w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+        </div>
+
+        <!-- ボタンエリア -->
+        <div class="pt-10 border-t border-slate-300 flex justify-end items-center space-x-6">
+          <%= link_to "キャンセル", cards_path, class: "text-[13px] font-bold text-slate-400 hover:text-slate-600 transition" %>
+          <%= f.submit "発行申請を登録する", class: "bg-brand hover:bg-brand-dark text-white text-[14px] font-bold py-3 px-10 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all cursor-pointer" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</main>

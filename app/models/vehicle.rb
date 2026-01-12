@@ -97,6 +97,11 @@ class Vehicle < ApplicationRecord
     end
   end
 
+  # 車両番号をまとめて表示（カード管理のセレクトボックス用）
+  def plate_number
+    "#{v_location} #{v_code} #{v_kana} #{v_serial}"
+  end
+
   private
 
   # 車検周期を自動計算してセットする

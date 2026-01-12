@@ -2,7 +2,7 @@ class Card < ApplicationRecord
   belongs_to :vehicle, optional: true # 車両がない（在庫）状態を許容する
 
   # enumの定義
-  enum issue_type: { initial: 0, reissue: 1 } # 発行区分（0:新規発行, 1:再発行）
+  enum issue_type: { initial: 0, reissue: 1 } # 発行種別（0:新規発行, 1:再発行）
   enum status: { requesting: 0, active: 1, stock: 2, inactive: 3 } # ステータス（0:申請中, 1:利用中, 2:在庫, 3:停止）
 
   # バリデーション
@@ -17,5 +17,15 @@ class Card < ApplicationRecord
       vehicle_id: nil,        # 車両との紐付けを解除
       returned_on: Date.today # 返却完了日を記録
     )
+  end
+
+  # カードステータスの表示形式
+  def status_text
+    case status
+    when 'requesting' then '申請中'
+    when 'active'     then '利用中'
+    when 'stock'      then '在庫'
+    when 'inactive'   then '停止'
+    end
   end
 end
