@@ -1,0 +1,55 @@
+<%= form_with model: card, local: true, data: { turbo: false }, class: "space-y-8" do |f| %>
+  <% if card.errors.any? %>
+    <div class="bg-red-50 text-red-500 p-4 rounded-lg text-sm font-bold text-center">
+      入力内容に不備があります。
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- 管理番号 -->
+    <div>
+      <%= f.label :internal_id, "管理番号", class: "block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3" %>
+      <%= f.text_field :internal_id, class: "w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+    </div>
+
+    <!-- 車両 -->
+    <div>
+      <%= f.label :vehicle_id, "紐付く車両", class: "block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3" %>
+      <div class="relative">
+        <%= f.collection_select :vehicle_id, vehicles, :id, :plate_number, { include_blank: "未割り当て（在庫）" }, { class: "w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all appearance-none cursor-pointer" } %>
+        <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- 発行種別 -->
+    <div>
+      <%= f.label :issue_type, "発行種別", class: "block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3" %>
+      <div class="relative">
+        <%= f.select :issue_type, Card.issue_types.keys.map { |k| [k == 'initial' ? '新規発行' : '再発行', k] }, {}, class: "w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all appearance-none cursor-pointer" %>
+        <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- 申請日 -->
+    <div>
+      <%= f.label :applied_on, "申請日", class: "block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3" %>
+      <%= f.date_field :applied_on, class: "w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+    </div>
+  </div>
+
+  <!-- 備考 -->
+  <div>
+    <%= f.label :remarks, "備考", class: "block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3" %>
+    <%= f.text_area :remarks, rows: 4, class: "w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+  </div>
+
+  <!-- ボタンエリア -->
+  <div class="pt-10 border-t border-slate-300 flex justify-end items-center space-x-6">
+    <%= link_to "キャンセル", cards_path, class: "text-[13px] font-bold text-slate-400 hover:text-slate-600 transition" %>
+    <%= f.submit "保存する", class: "bg-brand hover:bg-brand-dark text-white text-[14px] font-bold py-3 px-10 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all cursor-pointer" %>
+  </div>
+<% end %>
