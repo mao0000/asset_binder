@@ -26,9 +26,16 @@ class CardsController < ApplicationController
   end
 
   def edit
+    @vehicles = Vehicle.all
   end
 
   def update
+    if @card.update(card_params)
+      redirect_to @card, notice: "カード情報を更新しました。"
+    else
+      @vehicles = Vehicle.all
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy

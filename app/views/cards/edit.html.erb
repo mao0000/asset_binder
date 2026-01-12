@@ -1,0 +1,16 @@
+<main class="flex-1 overflow-y-auto bg-white px-10 py-12 page-fade">
+  <div class="max-w-5xl mx-auto">
+    <div class="flex items-center mb-10">
+      <%= link_to card_path(@card), class: "mr-4 p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      <% end %>
+      <h2 class="text-2xl font-bold text-slate-800 tracking-tight">カード情報の編集</h2>
+    </div>
+
+    <div class="bg-white border border-slate-300 rounded-xl shadow-sm p-10">
+      <%= render "form", card: @card, vehicles: @vehicles %>
+    </div>
+  </div>
+</main>
