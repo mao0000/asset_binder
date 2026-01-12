@@ -17,9 +17,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_12_155133) do
     t.string "card_number"
     t.integer "issue_type", default: 0, null: false
     t.integer "status", default: 0, null: false
-    t.date "applied_on"
-    t.date "received_on"
-    t.date "returned_on"
+    t.datetime "received_on"
+    t.datetime "returned_on"
     t.text "remarks"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

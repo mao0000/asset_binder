@@ -112,27 +112,20 @@
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-slate-100">
-              <% if @card.applied_on %>
-                <tr>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono"><%= @card.applied_on.strftime("%Y年%m月%d日") %></td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800"><%= @card.issue_type == 'initial' ? '新規発行申請' : '再発行申請' %></td>
-                </tr>
-              <% end %>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono"><%= @card.created_at.strftime("%Y年%m月%d日 %H:%M") %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800"><%= @card.issue_type == 'initial' ? '新規発行申請' : '再発行申請' %></td>
+              </tr>
               <% if @card.received_on %>
                 <tr>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono"><%= @card.received_on.strftime("%Y年%m月%d日") %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono"><%= @card.received_on.strftime("%Y年%m月%d日 %H:%M") %></td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">カード受領</td>
                 </tr>
               <% end %>
               <% if @card.returned_on %>
                 <tr>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono"><%= @card.returned_on.strftime("%Y年%m月%d日") %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono"><%= @card.returned_on.strftime("%Y年%m月%d日 %H:%M") %></td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">カード返却</td>
-                </tr>
-              <% end %>
-              <% unless @card.applied_on || @card.received_on || @card.returned_on %>
-                <tr>
-                  <td colspan="2" class="px-6 py-8 text-center text-sm text-slate-400">履歴はありません</td>
                 </tr>
               <% end %>
             </tbody>

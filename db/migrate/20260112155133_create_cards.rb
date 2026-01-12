@@ -8,9 +8,9 @@ class CreateCards < ActiveRecord::Migration[7.1]
       t.integer :issue_type, null: false, default: 0 # 発行区分（0:新規発行, 1:再発行）
       t.integer :status,     null: false, default: 0 # ステータス（0:申請中, 1:利用中, 2:在庫, 3:停止）
 
-      t.date :applied_on  # 申請日（本部がカード会社に発行申請した日）
-      t.date :received_on # 営業所受領日（営業所がカードを受領して利用可能な状態になった日）
-      t.date :returned_on # 本部返却完了日（車両の廃車・売却で在庫に戻ったカードが本部に返却された日）
+                          # 申請日（created_at:本部がカード会社へ発行申請した日）
+      t.datetime :received_on # 営業所受領日（営業所がカードを受領して利用可能な状態になった日）
+      t.datetime :returned_on # 本部返却完了日（車両の廃車・売却で在庫に戻ったカードが本部に返却された日）
 
       t.text :remarks # メモ欄
 
