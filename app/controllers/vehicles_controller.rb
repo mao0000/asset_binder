@@ -4,7 +4,7 @@ class VehiclesController < ApplicationController
 
   # 車両一覧（トップページ）
   def index
-    @vehicles = Vehicle.all.order(created_at: :desc)
+    @vehicles = Vehicle.search(params[:query]).order(created_at: :desc)
   end
 
   # 車両詳細

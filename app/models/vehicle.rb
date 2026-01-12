@@ -88,6 +88,15 @@ class Vehicle < ApplicationRecord
     update(inspection_expiration_date: new_expiration)
   end
 
+  # 検索機能
+  def self.search(query)
+    if query.present?
+      where('v_location LIKE :q OR v_code LIKE :q OR v_kana LIKE :q OR v_serial LIKE :q', q: "%#{query}%")
+    else
+      all
+    end
+  end
+
   private
 
   # 車検周期を自動計算してセットする
