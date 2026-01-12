@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  vehicle: one
+  office: one
+  internal_id: MyString
+  card_number: MyString
+  issue_type: 1
+  status: 1
+  applied_on: 2026-01-13
+  received_on: 2026-01-13
+  returned_on: 2026-01-13
+  remarks: MyText
+
+two:
+  vehicle: two
+  office: two
+  internal_id: MyString
+  card_number: MyString
+  issue_type: 1
+  status: 1
+  applied_on: 2026-01-13
+  received_on: 2026-01-13
+  returned_on: 2026-01-13
+  remarks: MyText

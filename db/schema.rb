@@ -10,7 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_01_180000) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_12_155133) do
+  create_table "cards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "vehicle_id"
+    t.string "internal_id", null: false
+    t.string "card_number"
+    t.integer "issue_type", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.date "applied_on"
+    t.date "received_on"
+    t.date "returned_on"
+    t.text "remarks"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["internal_id"], name: "index_cards_on_internal_id"
+    t.index ["vehicle_id"], name: "index_cards_on_vehicle_id"
+  end
+
   create_table "inspections", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "vehicle_id", null: false
     t.integer "inspection_type_id", null: false
@@ -60,6 +76,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_01_180000) do
     t.index ["v_serial"], name: "index_vehicles_on_v_serial"
   end
 
+  add_foreign_key "cards", "vehicles"
   add_foreign_key "inspections", "vehicles"
   add_foreign_key "vehicles", "users"
 end
