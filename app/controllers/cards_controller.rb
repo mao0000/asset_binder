@@ -57,18 +57,18 @@ class CardsController < ApplicationController
   # 営業所が受領した時の処理
   def receive
     if @card.update(status: :active, received_on: Date.today)
-      redirect_to @card, notice: "カードを受領し、利用開始しました。"
+      redirect_to @card, notice: "カードを受領し、利用開始しました。", status: :see_other
     else
-      redirect_to @card, alert: "受領処理に失敗しました。"
+      redirect_to @card, alert: "受領処理に失敗しました。", status: :unprocessable_entity
     end
   end
 
   # 本部に返却され在庫に戻る時の処理
   def return_to_stock
     if @card.update(status: :stock, vehicle_id: nil, returned_on: Date.today)
-      redirect_to cards_path, notice: "カードが本部へ返却され、在庫（フリー）になりました。"
+      redirect_to cards_path, notice: "カードが本部へ返却され、在庫（フリー）になりました。", status: :see_other
     else
-      redirect_to @card, alert: "返却処理に失敗しました。"
+      redirect_to @card, alert: "返却処理に失敗しました。", status: :unprocessable_entity
     end
   end
 
