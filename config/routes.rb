@@ -19,4 +19,9 @@ Rails.application.routes.draw do
 
   # サイドバーの「車検スケジュール」用
   resources :inspections, only: [:index, :show]
+
+  # 給油データ管理
+  resources :fuels do
+    collection { post :import } # CSVデータのインポート
+  end
 end
