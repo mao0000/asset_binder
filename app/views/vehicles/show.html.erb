@@ -125,85 +125,34 @@
     </div>
 
     <!-- 点検・整備履歴セクション -->
-    <div class="mt-10 bg-white border border-slate-300 rounded-xl shadow-sm overflow-hidden">
-      <div class="bg-slate-50 px-8 py-6 border-b border-slate-300">
-        <h3 class="text-lg font-bold text-slate-800">車検履歴</h3>
+    <div class="mt-10 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+      <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+        <h3 class="font-bold text-slate-800">車検履歴</h3>
       </div>
       
-      <div class="p-8">
-        <!-- 新規登録フォーム -->
-        <div class="bg-slate-50 p-6 rounded-xl border border-slate-300 mb-10">
-          <h4 class="text-sm font-bold text-slate-700 mb-4 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
-            新しい車検履歴を登録
-          </h4>
-
-          <!-- 自動判定メッセージ -->
-          <% validity_years = @vehicle.inspection_cycle_years %>
-          <% if validity_years %>
-            <div class="mb-6 bg-blue-50 text-blue-600 px-4 py-3 rounded-lg text-xs flex items-start border border-blue-100">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              <div>
-                <p class="font-bold">継続車検期間は<%= validity_years %>年です</p>
-              </div>
-            </div>
-          <% else %>
-            <div class="mb-6 bg-orange-50 text-orange-600 px-4 py-3 rounded-lg text-xs flex items-start border border-orange-100">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-              <div>
-                <p class="font-bold">自動判定できません</p>
-                <p class="mt-0.5 opacity-80">車両情報（用途・区分・種別・重量）が不足しているため、車検期間を自動判定できません。<br>車両編集画面から詳細情報を登録してください。</p>
-              </div>
-            </div>
-          <% end %>
-
-          <!-- 車検履歴新規登録フォーム -->
-          <%= form_with model: [@vehicle, Inspection.new], url: vehicle_inspections_path(@vehicle), local: true, data: { turbo: false }, class: "grid grid-cols-1 md:grid-cols-12 gap-4 items-end" do |f| %>
-            <%= f.hidden_field :inspection_type_id, value: 1 %>
-            <div class="md:col-span-4 space-y-1">
-              <label class="text-[10px] font-bold text-slate-400 uppercase">車検実施日</label>
-              <%= f.date_field :conducted_on, class: "w-full p-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand" %>
-            </div>
-            <div class="md:col-span-7 space-y-1">
-              <label class="text-[10px] font-bold text-slate-400 uppercase">メモ</label>
-              <%= f.text_field :memo, placeholder: "費用や整備内容など", class: "w-full p-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand" %>
-            </div>
-            <div class="md:col-span-1">
-              <%= f.submit "登録", class: "w-full bg-brand hover:bg-brand-dark text-white font-bold py-2.5 px-4 rounded-lg shadow-sm transition cursor-pointer text-sm" %>
-            </div>
-          <% end %>
-        </div>
-
-        <!-- 車検履歴リスト -->
-        <% if @vehicle.inspections.any? %>
-          <div class="overflow-x-auto">
-            <table class="min-w-full text-sm text-left">
-              <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-300">
-                <tr>
-                  <th class="px-4 py-3">実施日</th>
-                  <th class="px-4 py-3">メモ</th>
-                  <th class="px-4 py-3 text-right">操作</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-200">
-                <% @vehicle.inspections.order(conducted_on: :desc).each do |inspection| %>
-                  <tr class="hover:bg-slate-50">
-                    <td class="px-4 py-3"><%= inspection.display_conducted_on %></td>
-                    <td class="px-4 py-3 text-slate-500"><%= inspection.memo %></td>
-                    <td class="px-4 py-3 text-right">
-                      <%= button_to vehicle_inspection_path(@vehicle, inspection), method: :delete, data: { turbo: false }, class: "text-red-400 hover:text-red-600 transition", form: { style: 'display:inline-block;' }, onclick: "return confirm('削除しますか？');" do %>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                      <% end %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        <% else %>
+      <!-- 車検履歴リスト -->
+      <% if @vehicle.inspections.any? %>
+        <table class="min-w-full divide-y divide-slate-100">
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider w-1 whitespace-nowrap">実施日</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">メモ</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-slate-100">
+            <% @vehicle.inspections.order(conducted_on: :desc).each do |inspection| %>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono"><%= inspection.display_conducted_on %></td>
+                <td class="px-6 py-4 text-sm text-slate-600 text-left"><%= inspection.memo %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="p-6">
           <p class="text-slate-500 text-sm text-center py-4 bg-slate-50 rounded-lg border border-slate-300 border-dashed">車検履歴はまだありません。</p>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
   </div>
 </main>
