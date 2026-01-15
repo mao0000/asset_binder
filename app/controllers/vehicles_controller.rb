@@ -4,7 +4,7 @@ class VehiclesController < ApplicationController
 
   # 車両一覧（トップページ）
   def index
-    @vehicles = Vehicle.search(params[:query]).order(created_at: :desc)
+    @vehicles = Vehicle.search(params[:query])
     @vehicles = @vehicles.where(office_id: params[:office_id]) if params[:office_id].present?
   end
 
