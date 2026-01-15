@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   # 車両管理
   resources :vehicles do
     # 車検管理
-    resources :inspections, only: [:create, :destroy]
+    resources :inspections, only: :create
   end
 
   # カード管理
@@ -18,5 +18,5 @@ Rails.application.routes.draw do
   end
 
   # サイドバーの「車検スケジュール」用
-  resources :inspections, only: [:index]
+  resources :inspections, only: [:index, :show]
 end

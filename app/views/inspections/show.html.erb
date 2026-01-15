@@ -1,0 +1,187 @@
+<main class="flex-1 overflow-y-auto bg-white px-10 py-12">
+  <div class="max-w-5xl mx-auto">
+    <!-- 戻るボタンとタイトル -->
+    <div class="flex items-center justify-between mb-10">
+      <div class="flex items-center">
+        <%= link_to inspections_path, class: "mr-4 p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+        <% end %>
+        <h2 class="text-2xl font-bold text-slate-800 tracking-tight">車検履歴</h2>
+      </div>
+    </div>
+
+    <!-- 点検・整備履歴セクション -->
+    <!-- 車両詳細情報カード -->
+    <div class="bg-white border border-slate-300 rounded-xl shadow-sm overflow-hidden">
+      <div class="bg-slate-50 px-8 py-6 border-b border-slate-300 flex justify-between items-center">
+        <div>
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1"><%= @vehicle.office&.name %></p>
+          <h3 class="text-lg font-bold text-slate-800"><%= "#{@vehicle.v_location} #{@vehicle.v_code} #{@vehicle.v_kana} #{@vehicle.v_serial}" %></h3>
+        </div>
+        <% 
+          next_inspection = @vehicle.inspection_expiration_date
+          days_remaining = next_inspection ? (next_inspection - Date.today).to_i : nil
+        %>
+        <% if days_remaining %>
+          <div class="flex items-center">
+            <span class="text-xs font-bold text-slate-500 mr-2">次回車検まで</span>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold <%= days_remaining < 0 ? 'bg-red-100 text-red-700' : (days_remaining <= 60 ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 text-slate-600') %>">
+              <%= days_remaining < 0 ? "期限切れ (#{days_remaining.abs}日経過)" : "あと #{days_remaining} 日" %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+      
+      <div class="p-8">
+        <!-- 新規登録フォーム -->
+        <div class="bg-slate-50 p-6 rounded-xl border border-slate-300">
+          <h4 class="text-sm font-bold text-slate-700 mb-4 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+            新しい車検履歴を登録
+          </h4>
+
+          <!-- 自動判定メッセージ -->
+          <% validity_years = @vehicle.inspection_cycle_years %>
+          <% if validity_years %>
+            <div class="mb-6 text-blue-600 text-xs flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <div>
+                <p class="font-bold">次回車検期限は<%= (Date.today + validity_years.years).strftime('%Y年%m月%d日') %>です（車検周期：<%= validity_years %>年）</p>
+              </div>
+            </div>
+          <% else %>
+            <div class="mb-6 bg-orange-50 text-orange-600 px-4 py-3 rounded-lg text-xs flex items-start border border-orange-100">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+              <div>
+                <p class="font-bold">自動判定できません</p>
+                <p class="mt-0.5 opacity-80">車両情報（用途・区分・種別・重量）が不足しているため、車検期間を自動判定できません。<br>車両編集画面から詳細情報を登録してください。</p>
+              </div>
+            </div>
+          <% end %>
+
+          <!-- 車検履歴新規登録フォーム -->
+          <%= form_with model: [@vehicle, Inspection.new], url: vehicle_inspections_path(@vehicle), local: true, data: { turbo: false }, class: "grid grid-cols-1 md:grid-cols-12 gap-4 items-end" do |f| %>
+            <%= f.hidden_field :inspection_type_id, value: 1 %>
+            <div class="md:col-span-4 space-y-1">
+              <label class="text-[10px] font-bold text-slate-400 uppercase">車検実施日</label>
+              <%= f.date_field :conducted_on, class: "w-full p-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand" %>
+            </div>
+            <div class="md:col-span-7 space-y-1">
+              <label class="text-[10px] font-bold text-slate-400 uppercase">メモ</label>
+              <%= f.text_field :memo, placeholder: "費用や整備内容など", class: "w-full p-2.5 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand" %>
+            </div>
+            <div class="md:col-span-1">
+              <%= f.submit "登録", class: "w-full bg-brand hover:bg-brand-dark text-white font-bold py-2.5 px-4 rounded-lg shadow-sm transition cursor-pointer text-sm" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- 車検履歴リスト -->
+      <% if @vehicle.inspections.any? %>
+        <div class="border-t border-slate-200">
+          <table class="min-w-full divide-y divide-slate-100">
+            <thead class="bg-slate-50">
+              <tr>
+                <th scope="col" class="px-8 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider w-1 whitespace-nowrap">実施日</th>
+                <th scope="col" class="px-8 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">メモ</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-slate-100">
+              <% @vehicle.inspections.order(conducted_on: :desc).each do |inspection| %>
+                <tr>
+                  <td class="px-8 py-4 whitespace-nowrap text-sm text-slate-600 font-mono"><%= inspection.display_conducted_on %></td>
+                  <td class="px-8 py-4 text-sm text-slate-600 text-left"><%= inspection.memo %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="px-8 pb-8">
+          <p class="text-slate-500 text-sm text-center py-4 bg-slate-50 rounded-lg border border-slate-300 border-dashed">車検履歴はまだありません。</p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 車両詳細情報カード -->
+    <div class="mt-10 bg-white border border-slate-300 rounded-xl shadow-sm overflow-hidden">
+      <!-- ヘッダー部分 -->
+      <div class="bg-slate-50 px-8 py-6 border-b border-slate-300 flex justify-between items-center">
+        <div>
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">車両番号</p>
+          <h3 class="text-2xl font-bold text-slate-800"><%= "#{@vehicle.v_location} #{@vehicle.v_code} #{@vehicle.v_kana} #{@vehicle.v_serial}" %></h3>
+        </div>
+        <!-- ステータスバッジ -->
+        <% 
+          status_style = case @vehicle.status_id
+            when 1 then "bg-brand/5 text-brand border-brand/20"
+            else "bg-slate-100 text-slate-600 border-slate-300"
+          end
+        %>
+        <span class="inline-flex items-center px-3 py-1 rounded border text-sm font-semibold <%= status_style %>">
+          <%= @vehicle.status&.name %>
+        </span>
+      </div>
+
+      <!-- 詳細リスト -->
+      <div class="p-8">
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+          <div class="sm:col-span-1">
+            <dt class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">所属営業所</dt>
+            <dd class="text-sm font-semibold text-slate-800 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+              <%= @vehicle.office&.name %>
+            </dd>
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">初度登録年月</dt>
+            <dd class="text-sm font-semibold text-slate-800">
+              <%= @vehicle.display_first_registration_date || "未登録" %>
+            </dd>
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">有効期限の満了する日</dt>
+            <dd class="text-sm font-semibold text-slate-800">
+              <%= @vehicle.display_inspection_expiration_date || "未登録" %>
+            </dd>
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">自動車の種別</dt>
+            <dd class="text-sm font-semibold text-slate-800">
+              <%= @vehicle.vehicle_type || "未登録" %>
+            </dd>
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">用途</dt>
+            <dd class="text-sm font-semibold text-slate-800">
+              <%= @vehicle.usage || "未登録" %>
+            </dd>
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">自家用・事業用の別</dt>
+            <dd class="text-sm font-semibold text-slate-800">
+              <%= @vehicle.usage_type || "未登録" %>
+            </dd>
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">車両総重量</dt>
+            <dd class="text-sm font-semibold text-slate-800">
+              <%= @vehicle.gross_weight ? "#{number_with_delimiter(@vehicle.gross_weight)} kg" : "未登録" %>
+            </dd>
+          </div>
+          <div class="sm:col-span-1">
+            <dt class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">車載器管理番号</dt>
+            <dd class="text-sm font-semibold text-slate-800">
+              <%= @vehicle.formatted_obe_number || "未登録" %>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</main>

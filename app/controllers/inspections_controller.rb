@@ -25,12 +25,8 @@ class InspectionsController < ApplicationController
     end
   end
 
-  # 点検履歴の削除
-  def destroy
-    @inspection = Inspection.find(params[:id])
-    vehicle = @inspection.vehicle
-    @inspection.destroy
-    redirect_to vehicle_path(vehicle), notice: "点検履歴を削除しました。"
+  def show
+    @vehicle = Vehicle.find(params[:id])
   end
 
   private
