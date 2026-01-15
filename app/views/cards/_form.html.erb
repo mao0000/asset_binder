@@ -5,14 +5,14 @@
     </div>
   <% end %>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     <!-- 管理番号 -->
     <div>
       <%= f.label :internal_id, "管理番号", class: "block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3" %>
       <%= f.text_field :internal_id, class: "w-full p-3 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
     </div>
 
-    <!-- 車両 -->
+    <!-- 紐付く車両 -->
     <div>
       <%= f.label :vehicle_id, "紐付く車両", class: "block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3" %>
       <div class="relative">
