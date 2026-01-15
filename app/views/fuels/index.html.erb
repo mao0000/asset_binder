@@ -13,7 +13,7 @@
         </svg>
         CSVデータインポート
       </h3>
-      <%= form_with url: import_fuels_path, multipart: true, local: true, class: "flex items-center gap-4" do |f| %>
+      <%= form_with url: import_fuels_path, multipart: true, local: true, data: { turbo: false }, class: "flex items-center gap-4" do |f| %>
         <%= f.file_field :file, accept: ".csv", class: "block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand/10 file:text-brand hover:file:bg-brand/20" %>
         <%= f.submit "インポート", class: "bg-brand hover:bg-brand-dark text-white font-bold py-2 px-6 rounded-lg shadow-sm transition cursor-pointer text-sm whitespace-nowrap" %>
       <% end %>
