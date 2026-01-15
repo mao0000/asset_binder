@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_12_155133) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_15_132806) do
   create_table "cards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "vehicle_id"
     t.string "internal_id", null: false
@@ -24,6 +24,19 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_12_155133) do
     t.datetime "updated_at", null: false
     t.index ["internal_id"], name: "index_cards_on_internal_id"
     t.index ["vehicle_id"], name: "index_cards_on_vehicle_id"
+  end
+
+  create_table "fuels", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "card_id", null: false
+    t.datetime "filled_at"
+    t.integer "amount"
+    t.float "volume"
+    t.integer "unit_price"
+    t.string "store_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["card_id", "filled_at", "amount"], name: "idx_fuel_uniqueness", unique: true
+    t.index ["card_id"], name: "index_fuels_on_card_id"
   end
 
   create_table "inspections", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -76,6 +89,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_12_155133) do
   end
 
   add_foreign_key "cards", "vehicles"
+  add_foreign_key "fuels", "cards"
   add_foreign_key "inspections", "vehicles"
   add_foreign_key "vehicles", "users"
 end
