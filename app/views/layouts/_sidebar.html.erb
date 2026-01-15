@@ -4,7 +4,7 @@
       <% is_vehicles = controller_name == 'vehicles' %>
       <%= link_to root_path, class: "flex items-center py-2.5 px-3 rounded transition text-[13px] #{is_vehicles ? 'text-brand font-bold bg-white border border-slate-300 shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 font-medium'}" do %>
         <svg class="h-4 w-4 mr-3 <%= is_vehicles ? '' : 'opacity-70' %>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7" /></svg>
-        車両一覧
+        車両管理
       <% end %>
       <% is_inspections = controller_name == 'inspections' %>
       <%= link_to inspections_path, class: "flex items-center py-2.5 px-3 rounded transition text-[13px] #{is_inspections ? 'text-brand font-bold bg-white border border-slate-300 shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 font-medium'}" do %>
