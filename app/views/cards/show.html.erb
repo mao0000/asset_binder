@@ -13,24 +13,6 @@
       
       <!-- アクションボタン -->
       <div class="flex space-x-3">
-        <% if @card.requesting? %>
-          <%= button_to receive_card_path(@card), method: :patch, class: "flex items-center px-4 py-2 bg-brand hover:bg-brand-dark text-white rounded-lg text-sm font-bold shadow-md transition" do %>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-            受領する
-          <% end %>
-        <% end %>
-
-        <% if @card.active? %>
-          <%= button_to return_to_stock_card_path(@card), method: :patch, form: { data: { turbo: false }, onsubmit: "return confirm('カードを返却し、在庫に戻しますか？');" }, class: "flex items-center px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-brand transition shadow-sm" do %>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
-            </svg>
-            返却する
-          <% end %>
-        <% end %>
-
         <%= link_to edit_card_path(@card), class: "flex items-center px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-brand transition shadow-sm" do %>
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -47,10 +29,10 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="space-y-8">
       <!-- カードイメージ (ヘッダー部分) -->
-      <div class="lg:col-span-1">
-        <div class="bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl shadow-lg p-6 text-white h-56 flex flex-col justify-between relative overflow-hidden">
+      <div>
+        <div class="max-w-md bg-gradient-to-br from-slate-700 to-slate-800 rounded-xl shadow-lg p-8 text-white h-64 flex flex-col justify-between relative overflow-hidden">
           <!-- 装飾 -->
           <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 rounded-full bg-white/10 blur-2xl"></div>
           <div class="absolute bottom-0 left-0 -ml-8 -mb-8 w-32 h-32 rounded-full bg-white/10 blur-2xl"></div>
@@ -66,7 +48,7 @@
                 else "bg-slate-500/20 text-slate-100 border-slate-400/30"
               end
             %>
-            <span class="px-2 py-1 rounded text-xs font-semibold border <%= status_style %>">
+            <span class="px-3 py-1.5 rounded text-sm font-bold border <%= status_style %>">
               <%= @card.status_text %>
             </span>
           </div>
@@ -79,7 +61,7 @@
           <div class="grid grid-cols-2 gap-4 relative z-10">
             <div>
               <p class="text-xs text-slate-400 mb-1">車両番号</p>
-              <div class="font-medium text-lg">
+              <div class="font-medium text-base truncate">
                 <% if @card.vehicle %>
                   <%= link_to @card.vehicle.plate_number, vehicle_path(@card.vehicle), class: "hover:text-white/80 transition underline decoration-white/30 underline-offset-4" %>
                 <% else %>
@@ -90,15 +72,22 @@
             <% if @card.vehicle %>
               <div>
                 <p class="text-xs text-slate-400 mb-1">所属営業所</p>
-                <div class="font-medium text-lg"><%= @card.vehicle.office&.name %></div>
+                <div class="font-medium text-base truncate"><%= @card.vehicle.office&.name %></div>
               </div>
             <% end %>
           </div>
+
+          <% if @card.card_number.present? %>
+            <div class="relative z-10">
+              <p class="text-xs text-slate-400 mb-1">カード番号</p>
+              <h4 class="text-base font-mono font-bold tracking-wider"><%= @card.card_number %></h4>
+            </div>
+          <% end %>
         </div>
       </div>
 
       <!-- 詳細リスト (履歴・備考) -->
-      <div class="lg:col-span-2 space-y-6">
+      <div class="space-y-6">
         <!-- 履歴 -->
         <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
           <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
@@ -107,29 +96,99 @@
           <table class="min-w-full divide-y divide-slate-100">
             <thead class="bg-slate-50">
               <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider w-1/3">日付</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">日付</th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">内容</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">車両番号</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">所属営業所</th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-slate-100">
               <tr>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono"><%= @card.created_at.strftime("%Y年%m月%d日 %H:%M") %></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800"><%= @card.issue_type == 'initial' ? '新規発行申請' : '再発行申請' %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600"><%= @card.vehicle&.plate_number || '-' %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600"><%= @card.vehicle&.office&.name || '-' %></td>
               </tr>
               <% if @card.received_on %>
                 <tr>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono"><%= @card.received_on.strftime("%Y年%m月%d日 %H:%M") %></td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">カード受領</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600"><%= @card.vehicle&.plate_number || '-' %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600"><%= @card.vehicle&.office&.name || '-' %></td>
                 </tr>
               <% end %>
               <% if @card.returned_on %>
                 <tr>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-mono"><%= @card.returned_on.strftime("%Y年%m月%d日 %H:%M") %></td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">カード返却</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600"><%= @card.vehicle&.plate_number || '-' %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600"><%= @card.vehicle&.office&.name || '-' %></td>
                 </tr>
               <% end %>
             </tbody>
           </table>
+
+          <!-- 受領・返却アクション (フッター) -->
+          <% if @card.requesting? %>
+            <div class="px-6 py-5 border-t border-amber-200 bg-amber-50">
+              <div class="flex items-start">
+                <div class="flex-shrink-0">
+                  <svg class="h-5 w-5 text-amber-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <div class="ml-3 w-full">
+                  <h3 class="text-sm font-bold text-amber-800">受領処理が必要です</h3>
+                  <div class="mt-2 text-sm text-amber-700">
+                    <p class="mb-3">カードが手元に届いたら、カード番号(16桁)を入力して受領ボタンを押してください。</p>
+                    <%= form_with model: @card, url: receive_card_path(@card), method: :patch, local: true, class: "flex items-center space-x-2", data: { turbo: false } do |f| %>
+                      <%= f.text_field :card_number, 
+                          class: "px-3 py-1.5 text-sm border border-amber-300 rounded-md focus:ring-amber-500 focus:border-amber-500 w-64", 
+                          placeholder: "カード番号(16桁)",
+                          pattern: "\\d{16}",
+                          title: "16桁の半角数字を入力してください",
+                          required: true %>
+                      <%= button_tag type: "submit", onclick: "return confirm('カードを受領済みにしますか？');", class: "flex items-center px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm font-bold shadow-sm transition" do %>
+                      <div class="flex items-center space-x-1">
+                        <%= f.text_field :card_number_part1, 
+                            class: "px-2 py-1.5 text-sm border border-amber-300 rounded-md focus:ring-amber-500 focus:border-amber-500 w-14 text-center", 
+                            placeholder: "0000", maxlength: 4, pattern: "\\d{4}", required: true, title: "4桁の数字" %>
+                        <span class="text-amber-400 font-bold">-</span>
+                        <%= f.text_field :card_number_part2, 
+                            class: "px-2 py-1.5 text-sm border border-amber-300 rounded-md focus:ring-amber-500 focus:border-amber-500 w-14 text-center", 
+                            placeholder: "0000", maxlength: 4, pattern: "\\d{4}", required: true, title: "4桁の数字" %>
+                        <span class="text-amber-400 font-bold">-</span>
+                        <%= f.text_field :card_number_part3, 
+                            class: "px-2 py-1.5 text-sm border border-amber-300 rounded-md focus:ring-amber-500 focus:border-amber-500 w-14 text-center", 
+                            placeholder: "0000", maxlength: 4, pattern: "\\d{4}", required: true, title: "4桁の数字" %>
+                        <span class="text-amber-400 font-bold">-</span>
+                        <%= f.text_field :card_number_part4, 
+                            class: "px-2 py-1.5 text-sm border border-amber-300 rounded-md focus:ring-amber-500 focus:border-amber-500 w-14 text-center", 
+                            placeholder: "0000", maxlength: 4, pattern: "\\d{4}", required: true, title: "4桁の数字" %>
+                      </div>
+                      
+                      <%= button_tag type: "submit", onclick: "return confirm('カードを受領済みにしますか？');", class: "flex items-center px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm font-bold shadow-sm transition ml-2" do %>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        受領する
+                      <% end %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% elsif @card.active? %>
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+              <p class="text-sm text-slate-600 mb-3 font-medium">カードの返却が完了したら、返却完了ボタンを押してください。</p>
+              <%= button_to return_to_stock_card_path(@card), method: :patch, form: { data: { turbo: false }, onsubmit: "return confirm('カードを返却済みにし、在庫に戻しますか？');" }, class: "flex items-center px-3 py-1.5 bg-white border border-slate-300 rounded-md text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-brand transition shadow-sm" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                </svg>
+                返却完了
+              <% end %>
+            </div>
+          <% end %>
         </div>
 
         <!-- 備考 -->
