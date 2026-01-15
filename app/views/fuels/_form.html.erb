@@ -1,0 +1,61 @@
+<%= form_with model: fuel, local: true, data: { turbo: false }, class: "space-y-8" do |f| %>
+  <% if fuel.errors.any? %>
+    <div class="bg-red-50 text-red-500 p-4 rounded-lg text-sm font-bold text-center">
+      入力内容に不備があります。
+    </div>
+  <% end %>
+
+  <div class="bg-slate-50 p-8 rounded-xl border border-slate-300">
+    <div class="grid grid-cols-1 gap-6">
+      <!-- カード選択 -->
+      <div>
+        <%= f.label :card_id, "利用カード", class: "block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2" %>
+        <div class="relative">
+          <%= f.collection_select :card_id, cards, :id, :internal_id, { prompt: "カードを選択してください" }, { class: "w-full p-3 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all appearance-none cursor-pointer" } %>
+          <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+        </div>
+        <p class="text-xs text-slate-400 mt-1">※ 利用中のカードのみ表示されます</p>
+      </div>
+
+      <!-- 給油日時 -->
+      <div>
+        <%= f.label :filled_at, "給油日時", class: "block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2" %>
+        <%= f.datetime_field :filled_at, class: "w-full p-3 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- 給油量 -->
+        <div>
+          <%= f.label :volume, "給油量 (L)", class: "block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2" %>
+          <%= f.number_field :volume, step: "0.01", class: "w-full p-3 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+        </div>
+
+        <!-- 単価 -->
+        <div>
+          <%= f.label :unit_price, "単価 (円)", class: "block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2" %>
+          <%= f.number_field :unit_price, class: "w-full p-3 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+        </div>
+
+        <!-- 金額 -->
+        <div>
+          <%= f.label :amount, "金額 (円)", class: "block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2" %>
+          <%= f.number_field :amount, class: "w-full p-3 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+        </div>
+      </div>
+
+      <!-- 給油所名 -->
+      <div>
+        <%= f.label :store_name, "給油所名", class: "block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2" %>
+        <%= f.text_field :store_name, class: "w-full p-3 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:border-brand transition-all" %>
+      </div>
+    </div>
+  </div>
+
+  <!-- ボタンエリア -->
+  <div class="flex justify-end items-center space-x-6">
+    <%= link_to "キャンセル", fuels_path, class: "text-[13px] font-bold text-slate-400 hover:text-slate-600 transition" %>
+    <%= f.submit "保存する", class: "bg-brand hover:bg-brand-dark text-white text-[14px] font-bold py-3 px-10 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all cursor-pointer", data: { turbo: false }%>
+  </div>
+<% end %>
