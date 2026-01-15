@@ -85,6 +85,7 @@ class CardsController < ApplicationController
   end
 
   def card_params
-    params.require(:card).permit(:vehicle_id, :internal_id, :card_number, :issue_type, :status, :remarks)
+    params.require(:card).permit(:vehicle_id, :internal_id, :issue_type, :status, :remarks,
+                                 :card_number_part1, :card_number_part2, :card_number_part3, :card_number_part4)
   end
 end

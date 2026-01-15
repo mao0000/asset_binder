@@ -77,12 +77,14 @@
             <% end %>
           </div>
 
-          <% if @card.card_number.present? %>
-            <div class="relative z-10">
-              <p class="text-xs text-slate-400 mb-1">カード番号</p>
-              <h4 class="text-base font-mono font-bold tracking-wider"><%= @card.card_number %></h4>
-            </div>
-          <% end %>
+          <div class="relative z-10">
+            <p class="text-xs text-slate-400 mb-1">カード番号</p>
+            <% if @card.card_number.present? %>
+              <h4 class="text-base font-mono font-bold tracking-wider"><%= @card.card_number.scan(/.{1,4}/).join(' ') %></h4>
+            <% else %>
+              <span class="text-slate-500">未登録</span>
+            <% end %>
+          </div>
         </div>
       </div>
 
@@ -140,15 +142,8 @@
                 <div class="ml-3 w-full">
                   <h3 class="text-sm font-bold text-amber-800">受領処理が必要です</h3>
                   <div class="mt-2 text-sm text-amber-700">
-                    <p class="mb-3">カードが手元に届いたら、カード番号(16桁)を入力して受領ボタンを押してください。</p>
-                    <%= form_with model: @card, url: receive_card_path(@card), method: :patch, local: true, class: "flex items-center space-x-2", data: { turbo: false } do |f| %>
-                      <%= f.text_field :card_number, 
-                          class: "px-3 py-1.5 text-sm border border-amber-300 rounded-md focus:ring-amber-500 focus:border-amber-500 w-64", 
-                          placeholder: "カード番号(16桁)",
-                          pattern: "\\d{16}",
-                          title: "16桁の半角数字を入力してください",
-                          required: true %>
-                      <%= button_tag type: "submit", onclick: "return confirm('カードを受領済みにしますか？');", class: "flex items-center px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm font-bold shadow-sm transition" do %>
+                    <p class="mb-3">カードが手元に届いたら、カード番号(16桁)を入力して受領完了ボタンを押してください。</p>
+                    <%= form_with model: @card, url: receive_card_path(@card), method: :patch, local: true, class: "flex items-center", data: { turbo: false } do |f| %>
                       <div class="flex items-center space-x-1">
                         <%= f.text_field :card_number_part1, 
                             class: "px-2 py-1.5 text-sm border border-amber-300 rounded-md focus:ring-amber-500 focus:border-amber-500 w-14 text-center", 
@@ -167,11 +162,11 @@
                             placeholder: "0000", maxlength: 4, pattern: "\\d{4}", required: true, title: "4桁の数字" %>
                       </div>
                       
-                      <%= button_tag type: "submit", onclick: "return confirm('カードを受領済みにしますか？');", class: "flex items-center px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm font-bold shadow-sm transition ml-2" do %>
+                      <%= button_tag type: "submit", onclick: "return confirm('カードを受領済みにしますか？');", class: "flex items-center px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm font-bold shadow-sm transition ml-6" do %>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
-                        受領する
+                        受領完了
                       <% end %>
                     <% end %>
                   </div>
