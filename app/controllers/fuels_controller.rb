@@ -1,12 +1,23 @@
 class FuelsController < ApplicationController
   # 給油データ一覧
+  before_action :authenticate_user!
+
   def index
-    @fuels = Fuel.all.order(filled_at: :desc)
+    # 給油日時が新しい順に表示
+    @fuels = Fuel.includes(card: :vehicle).order(filled_at: :desc)
   end
 
   # 給油データのインポート
   def import
-    Fuel.import(params[:file])
-    redirect_to fuels_path, notice: "給油データをインポートしました。"
+    if params[:file].present?
+      begin
+        Fuel.import(params[:file])
+        redirect_to fuels_path, notice: "給油データをインポートしました。"
+      rescue => e
+        redirect_to fuels_path, alert: "インポートに失敗しました: #{e.message}"
+      end
+    else
+      redirect_to fuels_path, alert: "ファイルを選択してください。"
+    end
   end
 end
