@@ -24,4 +24,7 @@ Rails.application.routes.draw do
   resources :fuels do
     collection { post :import } # CSVデータのインポート
   end
+
+  # レポート
+  resources :reports, only: [:index]
 end
