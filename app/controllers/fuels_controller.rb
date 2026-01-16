@@ -5,7 +5,25 @@ class FuelsController < ApplicationController
 
   def index
     # 給油日時が新しい順に表示
-    @fuels = Fuel.includes(card: :vehicle).order(filled_at: :desc)
+    @fuels = Fuel.includes(card: :vehicle)
+
+    # 年月での絞り込み
+    if params[:month].present?
+      date = Date.parse("#{params[:month]}-01")
+      @fuels = @fuels.where(filled_at: date.all_month)
+    end
+
+    # 営業所での絞り込み
+    if params[:office_id].present?
+      @fuels = @fuels.joins(card: :vehicle).where(vehicles: { office_id: params[:office_id] })
+    end
+
+    # 車両番号での検索
+    if params[:query].present?
+      @fuels = @fuels.joins(card: :vehicle).merge(Vehicle.search(params[:query]))
+    end
+
+    @fuels = @fuels.order(filled_at: :desc)
   end
 
   def new
