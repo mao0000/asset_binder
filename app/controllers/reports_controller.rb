@@ -40,15 +40,15 @@ class ReportsController < ApplicationController
 
     # 4. グラフ用データ（月昇順）
     # @monthly_stats は降順（新しい順）になっているので、reverseして昇順（古い順）にする
-    @chart_data = {
-      labels: @monthly_stats.keys.reverse,
-      datasets: [{
-        label: '給油金額',
-        data: @monthly_stats.values.map { |d| d[:amount] }.reverse,
-        backgroundColor: 'rgba(59, 130, 246, 0.5)', # Tailwind blue-500
-        borderColor: 'rgb(59, 130, 246)',
-        borderWidth: 1
-      }]
-    }
+    # @chart_data = {
+    #   labels: @monthly_stats.keys.reverse,
+    #   datasets: [{
+    #     label: '給油金額',
+    #     data: @monthly_stats.values.map { |d| d[:amount] }.reverse,
+    #     backgroundColor: 'rgba(59, 130, 246, 0.5)', # Tailwind blue-500
+    #     borderColor: 'rgb(59, 130, 246)',
+    #     borderWidth: 1
+    #   }]
+    # }
   end
 end
