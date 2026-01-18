@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  root "vehicles#index" # ルートパスは車両一覧
+  root "dashboards#index"
+  resources :dashboards, only: [:index]
 
   # 車両管理
   resources :vehicles do
