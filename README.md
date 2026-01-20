@@ -1,14 +1,40 @@
 # Asset-Binder
 
-Asset-Binderは、会社の資産(Asset)である車両の情報を一元管理し、可視化するためのWebアプリケーションです。
+Asset-Binderは、会社の資産(Asset)である車両の情報を一元管理し、可視化するためのWebアプリケーション。
 
 ## 概要
 
-日々の車両情報を登録し、現在の車両状況を把握することができます。
+日々の車両情報を登録し、現在の車両状況を把握することができる。
+
+
+## URL
+
+https://asset-binder.onrender.com
+
+## テスト用アカウント
+
+・Basic認証ID：admin
+・Basic認証パスワード：1111
+・メールアドレス：admin@example.com
+・パスワード：111111
+
+## アプリケーションを作成した背景
+
+前職で車両管理業務に従事していた際、現場のIT化の遅れによる以下の3つの課題に直面した。
+
+・情報の分散: 複数のエクセルファイルにデータが散らばり、最新情報の把握に時間がかかる
+
+・属人化: 特定の担当者しか管理方法がわからず、休暇時や引き継ぎ時に業務が停滞する
+
+・非効率な運用: 手入力が多く、入力ミスや確認漏れが頻発している
+
+これらの不便さを身をもって経験し、「運送現場で働く人たちが、直感的に操作でき、誰でも一目で状況がわかる仕組み」が必要だと考えた。
+
+データ管理の負担を減らし、本来の業務に集中できる環境を作るため、このアプリケーションを開発した。
 
 ## 主な機能
 
-*   **ユーザー認証機能**: Deviseを使用したユーザー登録、ログイン、ログアウト機能。外部アクセスを遮断。
+*   **ユーザー認証機能**: Deviseを使用したログイン、ログアウト機能。外部アクセスを遮断。
 *   **車両管理機能**: 車両の登録、編集、削除、絞り込み検索（所属営業所、車両番号）。
 *   **期限管理機能**: 車検証の満了日を自動計算、期限前にアラート表示、車検実施日の登録、絞り込み検索（所属営業所、車両番号）。
 *   **給油カード管理機能**: 給油カードの登録、編集、削除、絞り込み検索（所属営業所、管理番号、ステータス、紐づく車両番号）。車両情報との紐付け。発行、受領、返却の履歴記録。
@@ -18,15 +44,11 @@ Asset-Binderは、会社の資産(Asset)である車両の情報を一元管理�
 *   **入力補助機能**: ActiveHashを使って入力欄をプルダウン選択。
 *   **レスポンシブデザイン**: Tailwind CSSを採用。
 
-## 使用技術
+## 実装予定の機能
 
-*   **バックエンド**: Ruby 3.2.0, Ruby on Rails 7.1.6
-*   **フロントエンド**: Hotwire (Turbo, Stimulus), Tailwind CSS, Chart.js(Chart.jsを利用したグラフは現在エラーのため非表示)
-*   **データベース**:
-    *   開発/テスト: MySQL
-    *   本番: PostgreSQL
-*   **インフラ**: Render
-*   **ビルドツール**: esbuild
+*   **ユーザー管理機能/ユーザーの権限設定機能**
+*   **タスク期限の通知機能**
+*   **データの編集履歴記録機能**
 
 ## ER図
 
@@ -113,9 +135,8 @@ graph TD
     VehicleList --> VehicleNew[車両登録]
     VehicleList --> VehicleShow[車両詳細]
     VehicleShow --> VehicleEdit[車両編集]
-    VehicleShow --> InspectionNew[車検登録]
 
-    Inspections --> VehicleShow
+    Inspections --> InspectionShow[車検スケジュール詳細]
 
     Cards --> CardList[カード一覧]
     CardList --> CardNew[カード登録]
@@ -127,3 +148,40 @@ graph TD
     FuelList --> FuelImport[CSVインポート]
     FuelList --> FuelEdit[給油記録編集]
 ```
+
+## 開発環境
+
+*   Ruby 3.2.0
+*   Ruby on Rails 7.1.6
+*   MySQL
+*   Node.js
+
+## ローカルでの動作方法
+
+1.  リポジトリをクローン
+    ```bash
+    git clone https://github.com/mao0000/asset_binder.git
+    cd asset_binder
+    ```
+
+2.  ライブラリをインストール
+    ```bash
+    bundle install
+    yarn install
+    ```
+
+3.  データベースを作成し、マイグレーションを実行
+    ```bash
+    rails db:create db:migrate
+    ```
+
+4.  初期データを投入
+    ```bash
+    rails db:seed
+    ```
+
+5.  サーバーを起動
+    ```bash
+    ./bin/dev
+    ```
+    ブラウザで `http://localhost:3000` にアクセス
