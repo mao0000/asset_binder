@@ -29,46 +29,54 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-200">
-          <% @vehicles.each do |vehicle| %>
-            <% 
-              next_inspection = vehicle.inspection_expiration_date
-              days_remaining = next_inspection ? (next_inspection - Date.today).to_i : nil
-              
-              # 期限切れや期限間近（2ヶ月以内）のスタイル設定
-              row_class = if days_remaining && days_remaining < 0
-                            "bg-red-50"
-                          elsif days_remaining && days_remaining <= 60
-                            "bg-orange-50"
-                          else
-                            "table-row-hover transition-colors"
-                          end
-              
-              text_color = if days_remaining && days_remaining < 0
-                             "text-red-600 font-bold"
-                           elsif days_remaining && days_remaining <= 60
-                             "text-orange-600 font-bold"
-                           else
-                             "text-slate-600"
-                           end
-            %>
-            <tr class="<%= row_class %> cursor-pointer" onclick="window.location='<%= inspection_path(vehicle) %>'">
-              <td class="py-4 px-6">
-                <p class="text-[14px] font-bold text-slate-800"><%= "#{vehicle.v_location} #{vehicle.v_code} #{vehicle.v_kana} #{vehicle.v_serial}" %></p>
-              </td>
-              <td class="py-4 px-6">
-                <p class="text-[13px] text-slate-700"><%= vehicle.office&.name %></p>
-              </td>
-              <td class="py-4 px-6">
-                <p class="text-[13px] <%= text_color %>"><%= next_inspection ? next_inspection.strftime('%Y年%m月%d日') : "未登録" %></p>
-              </td>
-              <td class="py-4 px-6">
-                <% if days_remaining %>
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-bold <%= days_remaining < 0 ? 'bg-red-100 text-red-700' : (days_remaining <= 60 ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 text-slate-600') %>">
-                    <%= days_remaining < 0 ? "期限切れ (#{days_remaining.abs}日経過)" : "あと #{days_remaining} 日" %>
-                  </span>
-                <% else %>
-                  <span class="text-xs text-slate-400">-</span>
-                <% end %>
+          <% if @vehicles.any? %>
+            <% @vehicles.each do |vehicle| %>
+              <% 
+                next_inspection = vehicle.inspection_expiration_date
+                days_remaining = next_inspection ? (next_inspection - Date.today).to_i : nil
+                
+                # 期限切れや期限間近（2ヶ月以内）のスタイル設定
+                row_class = if days_remaining && days_remaining < 0
+                              "bg-red-50"
+                            elsif days_remaining && days_remaining <= 60
+                              "bg-orange-50"
+                            else
+                              "table-row-hover transition-colors"
+                            end
+                
+                text_color = if days_remaining && days_remaining < 0
+                               "text-red-600 font-bold"
+                             elsif days_remaining && days_remaining <= 60
+                               "text-orange-600 font-bold"
+                             else
+                               "text-slate-600"
+                             end
+              %>
+              <tr class="<%= row_class %> cursor-pointer" onclick="window.location='<%= inspection_path(vehicle) %>'">
+                <td class="py-4 px-6">
+                  <p class="text-[14px] font-bold text-slate-800"><%= "#{vehicle.v_location} #{vehicle.v_code} #{vehicle.v_kana} #{vehicle.v_serial}" %></p>
+                </td>
+                <td class="py-4 px-6">
+                  <p class="text-[13px] text-slate-700"><%= vehicle.office&.name %></p>
+                </td>
+                <td class="py-4 px-6">
+                  <p class="text-[13px] <%= text_color %>"><%= next_inspection ? next_inspection.strftime('%Y年%m月%d日') : "未登録" %></p>
+                </td>
+                <td class="py-4 px-6">
+                  <% if days_remaining %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-bold <%= days_remaining < 0 ? 'bg-red-100 text-red-700' : (days_remaining <= 60 ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 text-slate-600') %>">
+                      <%= days_remaining < 0 ? "期限切れ (#{days_remaining.abs}日経過)" : "あと #{days_remaining} 日" %>
+                    </span>
+                  <% else %>
+                    <span class="text-xs text-slate-400">-</span>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="4" class="py-10 px-6 text-center text-slate-400 text-sm">
+                データはまだありません。
               </td>
             </tr>
           <% end %>

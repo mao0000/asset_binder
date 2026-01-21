@@ -40,24 +40,32 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-200">
-          <% @vehicles.each do |vehicle| %>
-            <tr class="table-row-hover transition-colors cursor-pointer" onclick="window.location='<%= vehicle_path(vehicle) %>'">
-              <td class="py-4 px-6">
-                <p class="text-[14px] font-bold text-slate-800"><%= "#{vehicle.v_location} #{vehicle.v_code} #{vehicle.v_kana} #{vehicle.v_serial}" %></p>
-              </td>
-              <td class="py-4 px-6">
-                <p class="text-[13px] text-slate-700"><%= vehicle.office&.name %></p>
-              </td>
-              <td class="py-4 px-6">
-                <% 
-                  status_style = case vehicle.status_id
-                    when 1 then "bg-brand/5 text-brand border-brand/20"
-                    else "bg-slate-100 text-slate-600 border-slate-300"
-                  end
-                %>
-                <span class="inline-flex items-center px-2.5 py-1 rounded border text-[13px] font-semibold <%= status_style %>">
-                  <%= vehicle.status&.name %>
-                </span>
+          <% if @vehicles.any? %>
+            <% @vehicles.each do |vehicle| %>
+              <tr class="table-row-hover transition-colors cursor-pointer" onclick="window.location='<%= vehicle_path(vehicle) %>'">
+                <td class="py-4 px-6">
+                  <p class="text-[14px] font-bold text-slate-800"><%= "#{vehicle.v_location} #{vehicle.v_code} #{vehicle.v_kana} #{vehicle.v_serial}" %></p>
+                </td>
+                <td class="py-4 px-6">
+                  <p class="text-[13px] text-slate-700"><%= vehicle.office&.name %></p>
+                </td>
+                <td class="py-4 px-6">
+                  <% 
+                    status_style = case vehicle.status_id
+                      when 1 then "bg-brand/5 text-brand border-brand/20"
+                      else "bg-slate-100 text-slate-600 border-slate-300"
+                    end
+                  %>
+                  <span class="inline-flex items-center px-2.5 py-1 rounded border text-[13px] font-semibold <%= status_style %>">
+                    <%= vehicle.status&.name %>
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="3" class="py-10 px-6 text-center text-slate-400 text-sm">
+                データはまだありません。
               </td>
             </tr>
           <% end %>
