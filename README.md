@@ -151,7 +151,6 @@ graph TD
 *   Ruby 3.2.0
 *   Ruby on Rails 7.1.6
 *   MySQL
-*   Node.js
 
 ## ローカルでの動作方法
 
